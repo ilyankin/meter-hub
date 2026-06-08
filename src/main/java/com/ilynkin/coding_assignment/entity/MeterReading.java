@@ -2,7 +2,10 @@ package com.ilynkin.coding_assignment.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -14,6 +17,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "METER_READINGS", indexes = {
         @Index(name = "IDX_METER_READINGS_METER",
@@ -40,6 +46,7 @@ public class MeterReading {
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private Instant createdAt;
 
+    @Builder.Default
     @OneToMany(mappedBy = "reading", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MeterReadingValue> values = new ArrayList<>();
 }

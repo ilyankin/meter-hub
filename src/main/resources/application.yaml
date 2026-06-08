@@ -24,3 +24,7 @@ spring:
 
   flyway:
     enabled: true
+
+  mvc:
+    problemdetails:
+      enabled: true

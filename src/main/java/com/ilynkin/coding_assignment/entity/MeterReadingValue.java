@@ -2,13 +2,19 @@ package com.ilynkin.coding_assignment.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "METER_READING_VALUES", indexes = {@Index(name = "IDX_READING_VALUES_ZONE",
         columnList = "TARIFF_ZONE_ID")})

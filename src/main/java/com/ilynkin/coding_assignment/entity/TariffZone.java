@@ -3,11 +3,17 @@ package com.ilynkin.coding_assignment.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "TARIFF_ZONES", uniqueConstraints = {@UniqueConstraint(name = "CONSTRAINT_61",
         columnNames = {"CODE"})})
