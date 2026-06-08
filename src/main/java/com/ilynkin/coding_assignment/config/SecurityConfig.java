@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs/**", "/h2-console/**").permitAll()
                 .requestMatchers("/api/users/**").hasRole("ADMIN")
+                .requestMatchers("/api/meters/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new BearerTokenFilter(authTokenRepository),

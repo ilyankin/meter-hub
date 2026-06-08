@@ -54,6 +54,15 @@ class AuthFlowIntegrationTest {
     }
 
     @Test
+    void managerToken_cannotAccessMeters_returns403() throws Exception {
+        String token = login(MANAGER_EMAIL, MANAGER_PASSWORD);
+
+        assertThat(mockMvc.get().uri("/api/meters")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .hasStatus(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
     void noToken_returns401() {
         assertThat(mockMvc.get().uri("/api/users/1"))
                 .hasStatus(HttpStatus.UNAUTHORIZED);
