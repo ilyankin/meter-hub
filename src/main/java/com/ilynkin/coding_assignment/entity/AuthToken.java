@@ -37,9 +37,9 @@ public class AuthToken {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @Size(max = 512)
+    @Size(max = 255)
     @NotNull
-    @Column(name = "TOKEN", nullable = false, length = 512)
+    @Column(name = "TOKEN", nullable = false, length = 255)
     private String token;
 
     @NotNull
@@ -47,7 +47,10 @@ public class AuthToken {
     private Instant expiresAt;
 
     @CreationTimestamp
-    @NotNull
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private Instant createdAt;
+
+    public boolean isExpired() {
+        return expiresAt.isBefore(Instant.now());
+    }
 }

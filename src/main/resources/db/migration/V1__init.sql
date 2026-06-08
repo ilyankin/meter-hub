@@ -25,10 +25,10 @@ CREATE TABLE users
     email      VARCHAR(255) NOT NULL UNIQUE,
     full_name  VARCHAR(255) NOT NULL,
     password   VARCHAR(255) NOT NULL,
-    role_id    BIGINT       NOT NULL,
+    role_code  VARCHAR(63)  NOT NULL,
     created_at TIMESTAMP    NOT NULL,
     updated_at TIMESTAMP    NOT NULL,
-    CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES user_roles (id),
+    CONSTRAINT fk_users_role FOREIGN KEY (role_code) REFERENCES user_roles (code),
     CONSTRAINT chk_users_email_not_blank CHECK (TRIM(email) <> ''),
     CONSTRAINT chk_users_full_name_not_blank CHECK (TRIM(full_name) <> ''),
     CONSTRAINT chk_users_password_not_blank CHECK (TRIM(password) <> '')
@@ -43,7 +43,7 @@ ON COLUMN users.full_name IS 'ФИО';
 COMMENT
 ON COLUMN users.password IS 'Пароль';
 COMMENT
-ON COLUMN users.role_id IS 'Роль (ссылка на справочник roles)';
+ON COLUMN users.role_code IS 'Роль (ссылка на справочник user_roles по коду)';
 
 -- Токены авторизации
 CREATE TABLE auth_tokens
@@ -166,7 +166,7 @@ ON COLUMN meter_reading_values.tariff_zone_id IS 'Связка с тарифно
 COMMENT
 ON COLUMN meter_reading_values.reading_value IS 'Значение показания по зоне';
 
-CREATE INDEX idx_users_role ON users (role_id);
+CREATE INDEX idx_users_role ON users (role_code);
 CREATE INDEX idx_auth_tokens_token ON auth_tokens (token);
 CREATE INDEX idx_auth_tokens_user ON auth_tokens (user_id);
 CREATE INDEX idx_meters_user ON meters (user_id);

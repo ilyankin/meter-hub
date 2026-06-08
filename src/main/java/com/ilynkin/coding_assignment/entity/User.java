@@ -20,7 +20,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Entity
 @Table(name = "USERS", indexes = {@Index(name = "IDX_USERS_ROLE",
-        columnList = "ROLE_ID")}, uniqueConstraints = {@UniqueConstraint(name = "CONSTRAINT_4D",
+        columnList = "ROLE_CODE")}, uniqueConstraints = {@UniqueConstraint(name = "CONSTRAINT_4D",
         columnNames = {"EMAIL"})})
 public class User {
     @Id
@@ -45,17 +45,15 @@ public class User {
     private String password;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ROLE_ID", nullable = false)
-    private UserRole role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE_CODE", nullable = false, length = 63)
+    private Role role;
 
     @CreationTimestamp
-    @NotNull
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private Instant createdAt;
 
     @UpdateTimestamp
-    @NotNull
     @Column(name = "UPDATED_AT", nullable = false)
     private Instant updatedAt;
 }

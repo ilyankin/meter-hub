@@ -1,6 +1,7 @@
 package com.ilynkin.coding_assignment.controller;
 
 import com.ilynkin.coding_assignment.dto.response.UserResponse;
+import com.ilynkin.coding_assignment.entity.Role;
 import com.ilynkin.coding_assignment.exception.DuplicateResourceException;
 import com.ilynkin.coding_assignment.exception.ResourceNotFoundException;
 import com.ilynkin.coding_assignment.service.UserService;
@@ -43,7 +44,7 @@ class UserControllerTest {
     @Test
     void create_returns201WithLocationAndNoPassword() {
         UserResponse response = new UserResponse(
-                1L, "ivan@example.com", "Иван Иванов", "ADMIN", Instant.now(), Instant.now());
+                1L, "ivan@example.com", "Иван Иванов", Role.ADMIN, Instant.now(), Instant.now());
         when(userService.create(any())).thenReturn(response);
 
         MvcTestResult result = mockMvc.post().uri("/api/users")
@@ -59,7 +60,7 @@ class UserControllerTest {
                 .satisfies(body -> {
                     assertThat(body.id()).isEqualTo(1L);
                     assertThat(body.email()).isEqualTo("ivan@example.com");
-                    assertThat(body.role()).isEqualTo("ADMIN");
+                    assertThat(body.role()).isEqualTo(Role.ADMIN);
                 });
 
         assertThat(result).bodyJson().doesNotHavePath("$.password");
@@ -68,13 +69,13 @@ class UserControllerTest {
     @Test
     void findById_returns200() {
         UserResponse response = new UserResponse(
-                1L, "ivan@example.com", "Иван Иванов", "MANAGER", Instant.now(), Instant.now());
+                1L, "ivan@example.com", "Иван Иванов", Role.MANAGER, Instant.now(), Instant.now());
         when(userService.findById(1L)).thenReturn(response);
 
         assertThat(mockMvc.get().uri("/api/users/1"))
                 .hasStatusOk()
                 .bodyJson().convertTo(UserResponse.class)
-                .satisfies(body -> assertThat(body.role()).isEqualTo("MANAGER"));
+                .satisfies(body -> assertThat(body.role()).isEqualTo(Role.MANAGER));
     }
 
     @Test
@@ -138,7 +139,7 @@ class UserControllerTest {
     @Test
     void update_returns200() {
         UserResponse response = new UserResponse(
-                1L, "ivan@example.com", "Иван Иванов", "ADMIN", Instant.now(), Instant.now());
+                1L, "ivan@example.com", "Иван Иванов", Role.ADMIN, Instant.now(), Instant.now());
         when(userService.update(eq(1L), any())).thenReturn(response);
 
         assertThat(mockMvc.put().uri("/api/users/1")

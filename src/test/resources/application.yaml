@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:meterhub_test;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: test
+    password: "test"
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+
+  mvc:
+    problemdetails:
+      enabled: true
+
+app:
+  admin:
+    email: admin@example.com
+    password: admin12345
+    full-name: Системный администратор
+  manager:
+    email: manager@example.com
+    password: manager123
+    full-name: Менеджер по умолчанию
