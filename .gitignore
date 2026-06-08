@@ -48,3 +48,6 @@ replay_pid*
 ### Project ###
 bin/
 .mtj.tmp/
+
+### H2 file database ###
+/data/

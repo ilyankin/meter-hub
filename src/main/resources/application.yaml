@@ -1,3 +1,26 @@
 spring:
   application:
     name: meter-hub-java-provision
+
+  datasource:
+    url: jdbc:h2:file:./data/meterhub;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: "test"
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
