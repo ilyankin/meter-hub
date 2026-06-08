@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: meter-hub-java-provision
