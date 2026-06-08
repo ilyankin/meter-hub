@@ -2,6 +2,7 @@ package com.ilynkin.coding_assignment.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,11 +45,24 @@ public class MeterReading {
     private Instant readingDate;
 
     @CreationTimestamp
-    @NotNull
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private Instant createdAt;
 
+    // Setter скрыт намеренно: Hibernate отслеживает этот конкретный экземпляр коллекции
+    // и через него удаляет осиротевшие строки (orphanRemoval). Если обновлять через setter, то потеряется
+    // отслеживание и будет возникать ошибка "collection ... was no longer referenced".
+    @Setter(AccessLevel.NONE)
     @Builder.Default
     @OneToMany(mappedBy = "reading", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MeterReadingValue> values = new ArrayList<>();
+
+    public List<MeterReadingValue> getValues() {
+        return Collections.unmodifiableList(values);
+    }
+
+    // Заменяет значения, мутируя тот же экземпляр коллекции, чтобы orphanRemoval удалил прежние строки
+    public void replaceValues(Collection<MeterReadingValue> newValues) {
+        this.values.clear();
+        this.values.addAll(newValues);
+    }
 }

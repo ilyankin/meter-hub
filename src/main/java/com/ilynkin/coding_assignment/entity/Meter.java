@@ -74,12 +74,10 @@ public class Meter {
     private String gisId;
 
     @CreationTimestamp
-    @NotNull
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private Instant createdAt;
 
     @UpdateTimestamp
-    @NotNull
     @Column(name = "UPDATED_AT", nullable = false)
     private Instant updatedAt;
 }
