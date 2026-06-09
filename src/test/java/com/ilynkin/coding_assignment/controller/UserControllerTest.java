@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -16,6 +18,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
 import java.time.Instant;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,6 +43,19 @@ class UserControllerTest {
 
     @MockitoBean
     private UserService userService;
+
+    @Test
+    void findAll_returnsPagedUsers() {
+        UserResponse response = new UserResponse(
+                1L, "ivan@example.com", "Иван Иванов", Role.ADMIN, Instant.now(), Instant.now());
+        when(userService.findAll(any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(response)));
+
+        assertThat(mockMvc.get().uri("/api/users"))
+                .hasStatusOk()
+                .bodyJson().extractingPath("$.content[0].email").asString()
+                .isEqualTo("ivan@example.com");
+    }
 
     @Test
     void create_returns201WithLocationAndNoPassword() {

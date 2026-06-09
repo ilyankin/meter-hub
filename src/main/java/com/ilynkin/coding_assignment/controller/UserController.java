@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,6 +21,12 @@ import java.net.URI;
 @Tag(name = "Пользователи", description = "Управление пользователями (только для администратора)")
 public class UserController {
     private final UserService userService;
+
+    @GetMapping
+    @Operation(summary = "Список пользователей", description = "Возвращает всех пользователей с пагинацией")
+    public PagedModel<UserResponse> findAll(Pageable pageable) {
+        return new PagedModel<>(userService.findAll(pageable));
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Информация о пользователе", description = "Возвращает данные пользователя по ID")
