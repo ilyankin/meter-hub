@@ -1,10 +1,10 @@
 package com.ilynkin.coding_assignment.service;
 
+import com.ilynkin.coding_assignment.config.AppProperties;
 import com.ilynkin.coding_assignment.service.MeterReadingReportService.ReportFile;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,14 +22,12 @@ public class ReportEmailSender {
     private final String from;
     private final String subject;
 
-    public ReportEmailSender(JavaMailSender mailSender,
-                             @Value("${app.report.recipient}") String recipient,
-                             @Value("${app.report.from}") String from,
-                             @Value("${app.report.subject}") String subject) {
+    public ReportEmailSender(JavaMailSender mailSender, AppProperties appProperties) {
+        AppProperties.Report report = appProperties.report();
         this.mailSender = mailSender;
-        this.recipient = recipient;
-        this.from = from;
-        this.subject = subject;
+        this.recipient = report.recipient();
+        this.from = report.from();
+        this.subject = report.subject();
     }
 
     public void send(ReportFile report) {

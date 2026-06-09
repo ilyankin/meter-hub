@@ -1,12 +1,12 @@
 package com.ilynkin.coding_assignment.service;
 
+import com.ilynkin.coding_assignment.config.AppProperties;
 import com.ilynkin.coding_assignment.entity.MeterReading;
 import com.ilynkin.coding_assignment.entity.MeterReadingValue;
 import com.ilynkin.coding_assignment.repository.MeterReadingRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,15 +33,14 @@ public class MeterReadingReportService {
     private static final String COL_DATE = "date";
 
     private final MeterReadingRepository readingRepository;
-
-    @Value("${app.report.period-days}")
-    private int periodDays;
+    private final AppProperties appProperties;
 
     public record ReportFile(String filename, byte[] content, int periodDays) {
     }
 
     @Transactional(readOnly = true)
     public ReportFile buildLatestReadingsReport() {
+        int periodDays = appProperties.report().periodDays();
         Instant since = Instant.now().minus(Duration.ofDays(periodDays));
         List<MeterReading> readings = readingRepository.findLatestPerMeterSince(since);
 
