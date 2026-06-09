@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/**").hasRole("ADMIN")
                 .requestMatchers("/api/meters/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/readings/import").hasRole("ADMIN")
+                .requestMatchers("/api/readings/**").hasAnyRole("ADMIN", "MANAGER")
                 .requestMatchers(HttpMethod.POST, "/api/reports/**").hasAnyRole("ADMIN", "MANAGER")
                 .anyRequest().authenticated()
             )
