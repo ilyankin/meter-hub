@@ -8,6 +8,16 @@ spring:
     username: sa
     password: "test"
 
+    hikari:
+      pool-name: meterhub-h2-pool
+      maximum-pool-size: ${APP_DB_POOL_MAX_SIZE:10}
+      minimum-idle: ${APP_DB_POOL_MIN_IDLE:10}
+      connection-timeout: ${APP_DB_CONNECTION_TIMEOUT_MS:5000}
+      validation-timeout: ${APP_DB_VALIDATION_TIMEOUT_MS:2000}
+      max-lifetime: ${APP_DB_MAX_LIFETIME_MS:1500000}
+      keepalive-time: ${APP_DB_KEEPALIVE_MS:120000}
+      leak-detection-threshold: ${APP_DB_LEAK_DETECTION_MS:0}
+
   h2:
     console:
       enabled: true
