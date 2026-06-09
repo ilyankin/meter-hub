@@ -30,6 +30,18 @@ spring:
     problemdetails:
       enabled: true
 
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:false}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS:false}
+
 springdoc:
   api-docs:
     path: /api-docs
@@ -44,3 +56,12 @@ app:
     email: ${APP_MANAGER_EMAIL:manager@example.com}
     password: ${APP_MANAGER_PASSWORD:manager123}
     full-name: ${APP_MANAGER_FULL_NAME:Менеджер по умолчанию}
+
+  # Периодический CSV-отчёт с последними показаниями (см. scheduling/ReportScheduler)
+  report:
+    recipient: ${APP_REPORT_RECIPIENT:user@example.com}
+    from: ${APP_REPORT_FROM:noreply@meterhub.local}
+    subject: ${APP_REPORT_SUBJECT:Показания приборов учёта}
+    interval: ${APP_REPORT_INTERVAL:14d}
+    initial-delay: ${APP_REPORT_INITIAL_DELAY:14d}
+    period-days: ${APP_REPORT_PERIOD_DAYS:14}

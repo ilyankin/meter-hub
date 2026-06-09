@@ -3,6 +3,7 @@ package com.ilynkin.coding_assignment.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.MailException;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -47,6 +48,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.CONFLICT, "Request violates a data integrity constraint");
         problem.setTitle("Conflict");
+        return problem;
+    }
+
+    @ExceptionHandler(MailException.class)
+    public ProblemDetail handleMailFailure(MailException ex) {
+        log.error("Не удалось отправить письмо с отчётом", ex);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_GATEWAY, "Failed to send the report email");
+        problem.setTitle("Mail delivery failed");
         return problem;
     }
 

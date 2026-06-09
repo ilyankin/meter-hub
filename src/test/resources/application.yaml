@@ -17,6 +17,10 @@ spring:
     problemdetails:
       enabled: true
 
+  mail:
+    host: localhost
+    port: 1025
+
 app:
   admin:
     email: admin@example.com
@@ -26,3 +30,10 @@ app:
     email: manager@example.com
     password: manager123
     full-name: Менеджер по умолчанию
+  report:
+    recipient: user@example.com
+    from: noreply@meterhub.local
+    subject: Показания приборов учёта
+    interval: 9999d
+    initial-delay: 9999d
+    period-days: 14

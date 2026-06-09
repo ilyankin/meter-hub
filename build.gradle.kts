@@ -30,6 +30,7 @@ dependencies {
     implementation("org.mapstruct:mapstruct:1.7.0.Beta1")
     implementation("org.apache.commons:commons-csv:1.11.0")
     compileOnly("org.projectlombok:lombok")
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     runtimeOnly("com.h2database:h2")
     annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
