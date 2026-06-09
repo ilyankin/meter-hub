@@ -9,3 +9,19 @@ services:
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: "true"
       MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: meterhub-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: meterhub
+      POSTGRES_USER: meterhub
+      POSTGRES_PASSWORD: meterhub
+    volumes:
+      - meterhub-pgdata:/var/lib/postgresql/data
+
+volumes:
+  meterhub-pgdata:
