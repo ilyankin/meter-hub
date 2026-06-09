@@ -39,3 +39,12 @@ app:
     interval: 9999d
     initial-delay: 9999d
     period-days: 14
+
+logging:
+  level:
+    com.ilynkin.coding_assignment: INFO
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+    org.hibernate: WARN
+    org.flywaydb: WARN
+    com.zaxxer.hikari: WARN

@@ -2,6 +2,14 @@ spring:
   jpa:
     show-sql: true
 
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %5p [%X{requestId:--}] [uid:%X{userId:--}] %logger{36} : %m%n%wEx"
+  level:
+    com.ilynkin.coding_assignment: DEBUG
+    org.springframework.security: DEBUG
+    com.zaxxer.hikari: WARN
+
 app:
   bootstrap:
     enabled: ${APP_BOOTSTRAP_ENABLED:true}
