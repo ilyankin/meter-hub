@@ -20,6 +20,23 @@ spring:
           starttls:
             enable: ${MAIL_SMTP_STARTTLS:true}
 
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  structured:
+    format:
+      console: ecs
+  level:
+    com.ilynkin.coding_assignment: INFO
+    org.springframework: WARN
+    org.flywaydb: INFO
+    org.hibernate: WARN
+    com.zaxxer.hikari: WARN
+
 app:
   # На проде сид ВЫКЛЮЧЕН. Чтобы завести первого админа (APP_BOOTSTRAP_ENABLED=true):
   # APP_BOOTSTRAP_ENABLED=true APP_ADMIN_EMAIL=... APP_ADMIN_PASSWORD=... APP_ADMIN_FULL_NAME=...
