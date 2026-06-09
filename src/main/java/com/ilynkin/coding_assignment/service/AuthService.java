@@ -1,5 +1,6 @@
 package com.ilynkin.coding_assignment.service;
 
+import com.ilynkin.coding_assignment.config.AppProperties;
 import com.ilynkin.coding_assignment.dto.request.LoginRequest;
 import com.ilynkin.coding_assignment.dto.response.AuthResponse;
 import com.ilynkin.coding_assignment.entity.AuthToken;
@@ -13,18 +14,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private static final int TOKEN_DAYS = 30;
-
     private final UserRepository userRepository;
     private final AuthTokenRepository authTokenRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AppProperties appProperties;
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
@@ -48,7 +47,7 @@ public class AuthService {
         AuthToken authToken = AuthToken.builder()
                 .user(user)
                 .token(tokenValue)
-                .expiresAt(Instant.now().plus(TOKEN_DAYS, ChronoUnit.DAYS))
+                .expiresAt(Instant.now().plus(appProperties.auth().tokenTtl()))
                 .build();
         authToken = authTokenRepository.save(authToken);
 

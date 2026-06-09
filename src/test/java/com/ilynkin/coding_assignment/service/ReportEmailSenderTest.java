@@ -25,7 +25,8 @@ class ReportEmailSenderTest {
 
         AppProperties appProperties = new AppProperties(null,
                 new AppProperties.Report("user@example.com", "noreply@meterhub.local", "Показания",
-                        Duration.ofDays(14), Duration.ofDays(14), 14));
+                        Duration.ofDays(14), Duration.ofDays(14), 14),
+                null);
         ReportEmailSender sender = new ReportEmailSender(mailSender, appProperties);
 
         sender.send(new ReportFile("meter-readings-2024-02-20.csv",

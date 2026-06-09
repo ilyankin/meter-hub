@@ -58,6 +58,11 @@ app:
   bootstrap:
     enabled: ${APP_BOOTSTRAP_ENABLED:false}
 
+  auth:
+    token-ttl: ${APP_AUTH_TOKEN_TTL:1d}
+    # Очистка истёкших токенов (см. scheduling/TokenCleanupScheduler)
+    cleanup-cron: ${APP_AUTH_CLEANUP_CRON:0 0 3 * * *}
+
   # Периодический CSV-отчёт с последними показаниями (см. scheduling/ReportScheduler)
   report:
     recipient: ${APP_REPORT_RECIPIENT:user@example.com}

@@ -39,6 +39,9 @@ app:
     interval: 9999d
     initial-delay: 9999d
     period-days: 14
+  auth:
+    token-ttl: 1d
+    cleanup-cron: 0 0 3 * * *
 
 logging:
   level:
