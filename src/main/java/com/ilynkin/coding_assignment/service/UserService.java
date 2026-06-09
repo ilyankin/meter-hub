@@ -1,6 +1,7 @@
 package com.ilynkin.coding_assignment.service;
 
 import com.ilynkin.coding_assignment.dto.request.UserRequest;
+import com.ilynkin.coding_assignment.dto.request.UserUpdateRequest;
 import com.ilynkin.coding_assignment.dto.response.UserResponse;
 import com.ilynkin.coding_assignment.entity.User;
 import com.ilynkin.coding_assignment.exception.DuplicateResourceException;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,6 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    @Transactional(readOnly = true)
     public UserResponse findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .map(userMapper::toResponse)
@@ -54,7 +55,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse update(Long id, UserRequest request) {
+    public UserResponse update(Long id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
@@ -63,7 +64,9 @@ public class UserService {
         }
 
         userMapper.updateEntity(request, user);
-        user.setPassword(passwordEncoder.encode(request.password()));
+        if (StringUtils.hasText(request.password())) {
+            user.setPassword(passwordEncoder.encode(request.password()));
+        }
         user.setRole(request.role());
 
         return userMapper.toResponse(userRepository.save(user));

@@ -1,6 +1,7 @@
 package com.ilynkin.coding_assignment.mapper;
 
 import com.ilynkin.coding_assignment.dto.request.UserRequest;
+import com.ilynkin.coding_assignment.dto.request.UserUpdateRequest;
 import com.ilynkin.coding_assignment.dto.response.UserResponse;
 import com.ilynkin.coding_assignment.entity.User;
 import org.mapstruct.Mapper;
@@ -24,5 +25,5 @@ public interface UserMapper {
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    void updateEntity(UserRequest request, @MappingTarget User user);
+    void updateEntity(UserUpdateRequest request, @MappingTarget User user);
 }

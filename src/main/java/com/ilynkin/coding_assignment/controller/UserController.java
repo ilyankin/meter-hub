@@ -1,7 +1,9 @@
 package com.ilynkin.coding_assignment.controller;
 
 import com.ilynkin.coding_assignment.dto.request.UserRequest;
+import com.ilynkin.coding_assignment.dto.request.UserUpdateRequest;
 import com.ilynkin.coding_assignment.dto.response.UserResponse;
+import com.ilynkin.coding_assignment.security.UserPrincipal;
 import com.ilynkin.coding_assignment.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -18,9 +22,17 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 @Tag(name = "Пользователи", description = "Управление пользователями (только для администратора)")
 public class UserController {
     private final UserService userService;
+
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Собственный профиль", description = "Возвращает профиль текущего аутентифицированного пользователя")
+    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal UserPrincipal principal) {
+        return ResponseEntity.ok(userService.findById(principal.id()));
+    }
 
     @GetMapping
     @Operation(summary = "Список пользователей", description = "Возвращает всех пользователей с пагинацией")
@@ -48,7 +60,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Редактирование пользователя", description = "Обновляет данные пользователя по ID")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest request) {
         return ResponseEntity.ok(userService.update(id, request));
     }
 

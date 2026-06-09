@@ -1,7 +1,7 @@
 package com.ilynkin.coding_assignment.controller;
 
 import com.ilynkin.coding_assignment.dto.response.AuthResponse;
-import com.ilynkin.coding_assignment.repository.UserRepository;
+import com.ilynkin.coding_assignment.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +28,7 @@ class AuthFlowIntegrationTest {
     private MockMvcTester mockMvc;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -36,7 +36,7 @@ class AuthFlowIntegrationTest {
     @Test
     void adminLogsInAndAccessesUsers_returns200() throws Exception {
         String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
-        Long adminId = userRepository.findByEmail(ADMIN_EMAIL).orElseThrow().getId();
+        Long adminId = userService.findByEmail(ADMIN_EMAIL).id();
 
         assertThat(mockMvc.get().uri("/api/users/{id}", adminId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
@@ -60,6 +60,22 @@ class AuthFlowIntegrationTest {
         assertThat(mockMvc.get().uri("/api/meters")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .hasStatus(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
+    void managerToken_getsOwnProfile_viaMe() throws Exception {
+        String token = login(MANAGER_EMAIL, MANAGER_PASSWORD);
+
+        assertThat(mockMvc.get().uri("/api/users/me")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .hasStatusOk()
+                .bodyJson().extractingPath("$.email").asString().isEqualTo(MANAGER_EMAIL);
+    }
+
+    @Test
+    void me_withoutToken_returns401() {
+        assertThat(mockMvc.get().uri("/api/users/me"))
+                .hasStatus(HttpStatus.UNAUTHORIZED);
     }
 
     @Test

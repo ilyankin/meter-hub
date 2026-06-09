@@ -1,3 +1,9 @@
+### @name me — собственный профиль, доступен любому аутентифицированному
+GET {{host}}/api/users/me
+Authorization: Bearer {{managerToken}}
+
+###
+
 ### @name findAllUsers
 GET {{host}}/api/users?page=0&size=20
 Authorization: Bearer {{adminToken}}
@@ -39,6 +45,19 @@ Content-Type: application/json
   "email": "updated.manager@example.com",
   "fullName": "Обновлённый менеджер",
   "password": "newpassword123",
+  "role": "MANAGER"
+}
+
+###
+
+### @name updateUserWithoutPassword — пароль опционален, текущий сохраняется
+PUT {{host}}/api/users/{{userId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "updated.manager@example.com",
+  "fullName": "Обновлённый менеджер (пароль прежний)",
   "role": "MANAGER"
 }
 

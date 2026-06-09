@@ -165,6 +165,37 @@ class UserControllerTest {
     }
 
     @Test
+    void update_withoutPassword_returns200() {
+        UserResponse response = new UserResponse(
+                1L, "ivan@example.com", "Иван Иванов", Role.ADMIN, Instant.now(), Instant.now());
+        when(userService.update(eq(1L), any())).thenReturn(response);
+
+        String bodyWithoutPassword = """
+                {"email":"ivan@example.com","fullName":"Иван Иванов","role":"ADMIN"}
+                """;
+
+        assertThat(mockMvc.put().uri("/api/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(bodyWithoutPassword))
+                .hasStatusOk();
+    }
+
+    @Test
+    void update_withShortPassword_returns400() {
+        String invalid = """
+                {"email":"ivan@example.com","fullName":"Иван Иванов","password":"short","role":"ADMIN"}
+                """;
+
+        assertThat(mockMvc.put().uri("/api/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalid))
+                .hasStatus(HttpStatus.BAD_REQUEST)
+                .hasContentTypeCompatibleWith(PROBLEM_JSON);
+
+        verifyNoInteractions(userService);
+    }
+
+    @Test
     void update_missing_returns404ProblemDetail() {
         when(userService.update(eq(99L), any()))
                 .thenThrow(new ResourceNotFoundException("User not found"));
