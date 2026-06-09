@@ -6,7 +6,6 @@ import com.ilynkin.coding_assignment.exception.CsvImportException;
 import com.ilynkin.coding_assignment.exception.CsvImportException.RowError;
 import com.ilynkin.coding_assignment.repository.MeterReadingRepository;
 import com.ilynkin.coding_assignment.repository.MeterRepository;
-import com.ilynkin.coding_assignment.repository.TariffZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -44,7 +43,7 @@ public class CsvImportService {
             .build();
 
     private final MeterRepository meterRepository;
-    private final TariffZoneRepository tariffZoneRepository;
+    private final TariffZoneService tariffZoneService;
     private final MeterReadingRepository readingRepository;
 
     @Transactional
@@ -125,9 +124,7 @@ public class CsvImportService {
                     .filter(h -> !h.equalsIgnoreCase(COL_SERIAL) && !h.equalsIgnoreCase(COL_DATE))
                     .toList();
 
-            zonesByCode = tariffZoneRepository.findByCodeIn(zoneHeaders)
-                    .stream()
-                    .collect(Collectors.toMap(TariffZone::getCode, Function.identity()));
+            zonesByCode = tariffZoneService.zonesByCode();
             for (String zh : zoneHeaders) {
                 if (!zonesByCode.containsKey(zh)) {
                     errors.add(new RowError(0, zh, "Unknown tariff zone"));

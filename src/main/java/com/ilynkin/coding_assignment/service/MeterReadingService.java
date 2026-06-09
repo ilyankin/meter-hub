@@ -8,7 +8,6 @@ import com.ilynkin.coding_assignment.exception.ResourceNotFoundException;
 import com.ilynkin.coding_assignment.mapper.MeterReadingMapper;
 import com.ilynkin.coding_assignment.repository.MeterReadingRepository;
 import com.ilynkin.coding_assignment.repository.MeterRepository;
-import com.ilynkin.coding_assignment.repository.TariffZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,17 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MeterReadingService {
     private final MeterReadingRepository meterReadingRepository;
     private final MeterRepository meterRepository;
-    private final TariffZoneRepository tariffZoneRepository;
+    private final TariffZoneService tariffZoneService;
     private final MeterReadingMapper meterReadingMapper;
 
     @Transactional(readOnly = true)
@@ -88,14 +84,8 @@ public class MeterReadingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Meter not found"));
     }
 
-    // зоны можно добавить в кэш L2
     private List<MeterReadingValue> buildValues(MeterReading reading, List<MeterReadingValueRequest> values) {
-        Set<String> codes = values.stream()
-                .map(MeterReadingValueRequest::tariffZone)
-                .collect(Collectors.toSet());
-        Map<String, TariffZone> zonesByCode = tariffZoneRepository.findByCodeIn(codes)
-                .stream()
-                .collect(Collectors.toMap(TariffZone::getCode, Function.identity()));
+        Map<String, TariffZone> zonesByCode = tariffZoneService.zonesByCode();
 
         return values
                 .stream()
