@@ -1,0 +1,3 @@
+### @name sendReportNow
+POST {{host}}/api/reports/send
+Authorization: Bearer {{adminToken}}

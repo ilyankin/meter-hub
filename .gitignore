@@ -51,3 +51,6 @@ bin/
 
 ### H2 file database ###
 /data/
+
+### HTTP Client ###
+http/http-client.private.env.json

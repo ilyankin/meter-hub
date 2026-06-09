@@ -1,0 +1,74 @@
+### @name findAllReadings
+GET {{host}}/api/readings?page=0&size=20
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name findReadingsByMeter
+GET {{host}}/api/readings?meterId={{meterId}}&page=0&size=20
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name findReadingById
+GET {{host}}/api/readings/{{readingId}}
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name createReading
+POST {{host}}/api/readings
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "meterId": {{meterId}},
+  "readingDate": "{{$isoTimestamp}}",
+  "values": [
+    { "tariffZone": "T1", "value": 1234.56 },
+    { "tariffZone": "T2", "value": 789.00 }
+  ]
+}
+
+> {%
+  if (response.status === 201) {
+    client.global.set("readingId", response.body.id);
+  }
+%}
+
+###
+
+### @name updateReading
+PUT {{host}}/api/readings/{{readingId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "meterId": {{meterId}},
+  "readingDate": "{{$isoTimestamp}}",
+  "values": [
+    { "tariffZone": "T1", "value": 1300.00 },
+    { "tariffZone": "T2", "value": 800.00 }
+  ]
+}
+
+###
+
+### @name deleteReading
+DELETE {{host}}/api/readings/{{readingId}}
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name importCsv
+POST {{host}}/api/readings/import
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="readings.csv"
+Content-Type: text/csv
+
+serial,date,T1,T2
+SN-001-2025,2026-06-09,1234.56,789.00
+--boundary--

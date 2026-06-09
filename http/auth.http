@@ -1,0 +1,37 @@
+### @name loginAdmin
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+> {%
+  if (response.status === 200) {
+    client.global.set("adminToken", response.body.token);
+  }
+%}
+
+###
+
+### @name loginManager
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{managerEmail}}",
+  "password": "{{managerPassword}}"
+}
+
+> {%
+  if (response.status === 200) {
+    client.global.set("managerToken", response.body.token);
+  }
+%}
+
+###
+
+### @name logout
+POST {{host}}/api/auth/logout
+Authorization: Bearer {{adminToken}}

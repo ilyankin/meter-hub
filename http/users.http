@@ -1,0 +1,49 @@
+### @name findAllUsers
+GET {{host}}/api/users?page=0&size=20
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name findUserById
+GET {{host}}/api/users/{{userId}}
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name createUser
+POST {{host}}/api/users
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "new.manager@example.com",
+  "fullName": "Новый менеджер",
+  "password": "password123",
+  "role": "MANAGER"
+}
+
+> {%
+  if (response.status === 201) {
+    client.global.set("userId", response.body.id);
+  }
+%}
+
+###
+
+### @name updateUser
+PUT {{host}}/api/users/{{userId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "updated.manager@example.com",
+  "fullName": "Обновлённый менеджер",
+  "password": "newpassword123",
+  "role": "MANAGER"
+}
+
+###
+
+### @name deleteUser
+DELETE {{host}}/api/users/{{userId}}
+Authorization: Bearer {{adminToken}}

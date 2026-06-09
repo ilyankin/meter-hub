@@ -1,0 +1,66 @@
+### @name findAllMeters
+GET {{host}}/api/meters?page=0&size=20
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name findMetersByUser
+GET {{host}}/api/meters?userId={{userId}}&page=0&size=20
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name findMeterById
+GET {{host}}/api/meters/{{meterId}}
+Authorization: Bearer {{adminToken}}
+
+###
+
+### @name createMeter
+POST {{host}}/api/meters
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "userId": {{userId}},
+  "serialNumber": "SN-001-2025",
+  "inventoryNumber": "INV-001",
+  "manufactureYear": 2020,
+  "installationDate": "2021-06-01",
+  "sealNumber": "SEAL-001",
+  "antimagneticSealNumber": "AMAG-001",
+  "installationLocation": "Щитовая, этаж 1",
+  "notes": "Тестовый прибор учёта",
+  "gisId": "GIS-001"
+}
+
+> {%
+  if (response.status === 201) {
+    client.global.set("meterId", response.body.id);
+  }
+%}
+
+###
+
+### @name updateMeter
+PUT {{host}}/api/meters/{{meterId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "userId": {{userId}},
+  "serialNumber": "SN-001-2025-UPD",
+  "inventoryNumber": "INV-001",
+  "manufactureYear": 2021,
+  "installationDate": "2021-06-01",
+  "sealNumber": "SEAL-002",
+  "antimagneticSealNumber": "AMAG-002",
+  "installationLocation": "Щитовая, этаж 1 (обновлено)",
+  "gisId": "GIS-001"
+}
+
+###
+
+### @name deleteMeter
+DELETE {{host}}/api/meters/{{meterId}}
+Authorization: Bearer {{adminToken}}
