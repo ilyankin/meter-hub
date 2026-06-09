@@ -54,7 +54,7 @@ public class MeterReadingService {
                 .build();
         reading.replaceValues(buildValues(reading, request.values()));
 
-        return meterReadingMapper.toResponse(meterReadingRepository.save(reading));
+        return meterReadingMapper.toResponse(meterReadingRepository.saveAndFlush(reading));
     }
 
     @Transactional

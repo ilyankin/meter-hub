@@ -50,7 +50,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setRole(request.role());
 
-        return userMapper.toResponse(userRepository.save(user));
+        return userMapper.toResponse(userRepository.saveAndFlush(user));
     }
 
     @Transactional

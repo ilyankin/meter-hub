@@ -47,7 +47,7 @@ public class MeterService {
         Meter meter = meterMapper.toEntity(request);
         meter.setUser(getUser(request.userId()));
 
-        return meterMapper.toResponse(meterRepository.save(meter));
+        return meterMapper.toResponse(meterRepository.saveAndFlush(meter));
     }
 
     @Transactional
