@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    show-sql: true
+
+app:
+  bootstrap:
+    enabled: ${APP_BOOTSTRAP_ENABLED:true}
+    admin:
+      email: ${APP_ADMIN_EMAIL:admin@example.com}
+      password: ${APP_ADMIN_PASSWORD:admin12345}
+      full-name: ${APP_ADMIN_FULL_NAME:Системный администратор}
+    manager:
+      email: ${APP_MANAGER_EMAIL:manager@example.com}
+      password: ${APP_MANAGER_PASSWORD:manager123}
+      full-name: ${APP_MANAGER_FULL_NAME:Менеджер по умолчанию}

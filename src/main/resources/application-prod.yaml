@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: ${APP_DB_URL:jdbc:postgresql://localhost:5432/meterhub}
+    driver-class-name: org.postgresql.Driver
+    username: ${APP_DB_USERNAME:meterhub}
+    password: ${APP_DB_PASSWORD}
+
+  jpa:
+    show-sql: false
+
+  h2:
+    console:
+      enabled: false
+
+  mail:
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS:true}
+
+app:
+  # На проде сид ВЫКЛЮЧЕН. Чтобы завести первого админа (APP_BOOTSTRAP_ENABLED=true):
+  # APP_BOOTSTRAP_ENABLED=true APP_ADMIN_EMAIL=... APP_ADMIN_PASSWORD=... APP_ADMIN_FULL_NAME=...
+  bootstrap:
+    enabled: ${APP_BOOTSTRAP_ENABLED:false}
+    admin:
+      email: ${APP_ADMIN_EMAIL:}
+      password: ${APP_ADMIN_PASSWORD:}
+      full-name: ${APP_ADMIN_FULL_NAME:}
+    manager:
+      email: ${APP_MANAGER_EMAIL:}
+      password: ${APP_MANAGER_PASSWORD:}
+      full-name: ${APP_MANAGER_FULL_NAME:}

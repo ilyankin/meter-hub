@@ -2,14 +2,12 @@ spring:
   application:
     name: meter-hub-java-provision
 
-  datasource:
-    url: jdbc:h2:file:./data/meterhub;AUTO_SERVER=TRUE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: "test"
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
 
+  datasource:
     hikari:
-      pool-name: meterhub-h2-pool
+      pool-name: meterhub-pool
       maximum-pool-size: ${APP_DB_POOL_MAX_SIZE:10}
       minimum-idle: ${APP_DB_POOL_MIN_IDLE:10}
       connection-timeout: ${APP_DB_CONNECTION_TIMEOUT_MS:5000}
@@ -18,16 +16,10 @@ spring:
       keepalive-time: ${APP_DB_KEEPALIVE_MS:120000}
       leak-detection-threshold: ${APP_DB_LEAK_DETECTION_MS:0}
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
   jpa:
     hibernate:
       ddl-auto: validate
     open-in-view: false
-    show-sql: true
     properties:
       hibernate:
         format_sql: true
@@ -57,6 +49,11 @@ springdoc:
     path: /api-docs
 
 app:
+  # Создание учётных записей при старте (см. config/DataInitializer).
+  # Включён только в dev/test
+  bootstrap:
+    enabled: ${APP_BOOTSTRAP_ENABLED:false}
+
   # Периодический CSV-отчёт с последними показаниями (см. scheduling/ReportScheduler)
   report:
     recipient: ${APP_REPORT_RECIPIENT:user@example.com}
