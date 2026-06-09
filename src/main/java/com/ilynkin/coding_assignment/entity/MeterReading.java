@@ -24,11 +24,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "METER_READINGS", indexes = {
-        @Index(name = "IDX_METER_READINGS_METER",
-                columnList = "METER_ID"),
-        @Index(name = "IDX_METER_READINGS_DATE",
-                columnList = "READING_DATE")})
+@Table(name = "METER_READINGS",
+        indexes = {
+                @Index(name = "IDX_METER_READINGS_METER",
+                        columnList = "METER_ID"),
+                @Index(name = "IDX_METER_READINGS_DATE",
+                        columnList = "READING_DATE")},
+        uniqueConstraints = {
+                @UniqueConstraint(name = "UQ_METER_READINGS_METER_DATE",
+                        columnNames = {"METER_ID", "READING_DATE"})})
 public class MeterReading {
     @Id
     @UuidGenerator(style = UuidGenerator.Style.VERSION_7)

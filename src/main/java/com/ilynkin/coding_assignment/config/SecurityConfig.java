@@ -5,6 +5,7 @@ import com.ilynkin.coding_assignment.security.BearerTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +38,7 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs/**", "/h2-console/**").permitAll()
                 .requestMatchers("/api/users/**").hasRole("ADMIN")
                 .requestMatchers("/api/meters/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/readings/import").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new BearerTokenFilter(authTokenRepository),

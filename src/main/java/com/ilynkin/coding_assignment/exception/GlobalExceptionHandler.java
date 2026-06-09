@@ -27,6 +27,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(CsvImportException.class)
+    public ProblemDetail handleCsvImport(CsvImportException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST, "CSV-файл содержит ошибки и не был импортирован");
+        problem.setTitle("CSV import failed");
+        problem.setProperty("errors", ex.getErrors());
+        return problem;
+    }
+
     /**
      * Перехватывает нарушение ограничений БД (например, UNIQUE на email при гонке
      * двух параллельных create — проверка existsByEmail не атомарна с insert).

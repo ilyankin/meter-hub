@@ -3,6 +3,7 @@ package com.ilynkin.coding_assignment.controller;
 import com.ilynkin.coding_assignment.dto.response.MeterReadingResponse;
 import com.ilynkin.coding_assignment.dto.response.MeterReadingValueResponse;
 import com.ilynkin.coding_assignment.exception.ResourceNotFoundException;
+import com.ilynkin.coding_assignment.service.CsvImportService;
 import com.ilynkin.coding_assignment.service.MeterReadingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,9 @@ class MeterReadingControllerTest {
 
     @MockitoBean
     private MeterReadingService readingService;
+
+    @MockitoBean
+    private CsvImportService csvImportService;
 
     private static MeterReadingResponse sampleResponse() {
         return new MeterReadingResponse(

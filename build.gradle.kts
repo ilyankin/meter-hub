@@ -28,6 +28,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-h2console")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
     implementation("org.mapstruct:mapstruct:1.7.0.Beta1")
+    implementation("org.apache.commons:commons-csv:1.11.0")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("com.h2database:h2")
     annotationProcessor("org.projectlombok:lombok")

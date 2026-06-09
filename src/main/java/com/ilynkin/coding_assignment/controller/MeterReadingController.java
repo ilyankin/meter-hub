@@ -1,7 +1,9 @@
 package com.ilynkin.coding_assignment.controller;
 
 import com.ilynkin.coding_assignment.dto.request.MeterReadingRequest;
+import com.ilynkin.coding_assignment.dto.response.CsvImportResponse;
 import com.ilynkin.coding_assignment.dto.response.MeterReadingResponse;
+import com.ilynkin.coding_assignment.service.CsvImportService;
 import com.ilynkin.coding_assignment.service.MeterReadingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,8 +11,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -23,6 +27,7 @@ import java.util.UUID;
 public class MeterReadingController {
 
     private final MeterReadingService readingService;
+    private final CsvImportService csvImportService;
 
     @GetMapping
     @Operation(summary = "Список показаний", description = "Возвращает показания с пагинацией, опционально по прибору учёта")
@@ -34,6 +39,14 @@ public class MeterReadingController {
     @Operation(summary = "Информация о показании", description = "Возвращает показание по ID")
     public ResponseEntity<MeterReadingResponse> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(readingService.findById(id));
+    }
+
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Импорт показаний из CSV",
+            description = "Загружает показания файлом (поле file). Формат: serial,date,<зоны>. "
+                    + "Всё или ничего: любая ошибка отклоняет весь файл (только администратор).")
+    public ResponseEntity<CsvImportResponse> importCsv(@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(csvImportService.importReadings(file));
     }
 
     @PostMapping
