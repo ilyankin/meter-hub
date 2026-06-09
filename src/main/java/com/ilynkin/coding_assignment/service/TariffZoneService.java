@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TariffZoneService {
-
     public static final String CACHE_TARIFF_ZONES = "tariffZones";
 
     private final TariffZoneRepository tariffZoneRepository;

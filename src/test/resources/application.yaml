@@ -21,6 +21,23 @@ spring:
     host: localhost
     port: 1025
 
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    mail:
+      enabled: false # В тестах SMTP-сервера не поднимается
+
 app:
   bootstrap:
     enabled: true

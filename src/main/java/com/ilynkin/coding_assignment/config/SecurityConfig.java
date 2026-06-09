@@ -31,10 +31,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http
             .csrf(AbstractHttpConfigurer::disable)
+            // Кросс-доменных клиентов нет — CORS отключён явно. При появлении SPA/внешнего
+            // фронта заменить на настроенный CorsConfigurationSource
+            .cors(AbstractHttpConfigurer::disable)
             .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                // health открыт для k8s liveness/readiness и load balancer'ов
+                .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs/**", "/h2-console/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
                 .requestMatchers("/api/users/**").hasRole("ADMIN")

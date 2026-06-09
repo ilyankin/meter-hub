@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/readings")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 @Tag(name = "Показания", description = "Управление показаниями приборов учёта (администратор и менеджер)")
 public class MeterReadingController {
 
@@ -42,6 +44,7 @@ public class MeterReadingController {
     }
 
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Импорт показаний из CSV",
             description = "Загружает показания файлом (поле file). Формат: serial,date,<зоны>. "
                     + "Всё или ничего: любая ошибка отклоняет весь файл (только администратор).")

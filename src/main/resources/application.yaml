@@ -36,6 +36,11 @@ spring:
     problemdetails:
       enabled: true
 
+  servlet:
+    multipart:
+      max-file-size: ${APP_MULTIPART_MAX_FILE_SIZE:15MB}
+      max-request-size: ${APP_MULTIPART_MAX_REQUEST_SIZE:15MB}
+
   cache:
     type: caffeine
     cache-names: tariffZones
@@ -51,6 +56,18 @@ spring:
           auth: ${MAIL_SMTP_AUTH:false}
           starttls:
             enable: ${MAIL_SMTP_STARTTLS:false}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: when-authorized
+  info:
+    git:
+      mode: full
 
 springdoc:
   api-docs:
