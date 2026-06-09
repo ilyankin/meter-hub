@@ -1,12 +1,9 @@
 package com.ilynkin.coding_assignment.service;
 
 import com.ilynkin.coding_assignment.dto.request.LoginRequest;
-import com.ilynkin.coding_assignment.dto.request.RegisterRequest;
 import com.ilynkin.coding_assignment.dto.response.AuthResponse;
 import com.ilynkin.coding_assignment.entity.AuthToken;
-import com.ilynkin.coding_assignment.entity.Role;
 import com.ilynkin.coding_assignment.entity.User;
-import com.ilynkin.coding_assignment.exception.DuplicateResourceException;
 import com.ilynkin.coding_assignment.exception.UnauthorizedException;
 import com.ilynkin.coding_assignment.repository.AuthTokenRepository;
 import com.ilynkin.coding_assignment.repository.UserRepository;
@@ -28,23 +25,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuthTokenRepository authTokenRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @Transactional
-    public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.email())) {
-            throw new DuplicateResourceException("User with email " + request.email() + " already exists");
-        }
-
-        User user = User.builder()
-                .email(request.email())
-                .fullName(request.fullName())
-                .password(passwordEncoder.encode(request.password()))
-                .role(Role.MANAGER)
-                .build();
-        user = userRepository.save(user);
-
-        return createToken(user);
-    }
 
     @Transactional
     public AuthResponse login(LoginRequest request) {

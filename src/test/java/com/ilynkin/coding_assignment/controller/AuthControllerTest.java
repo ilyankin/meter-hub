@@ -34,26 +34,6 @@ class AuthControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void register_returns201WithToken() {
-        String body = """
-                {"email":"ivan@example.com","fullName":"Иван Иванов","password":"secret12"}
-                """;
-
-        MvcTestResult result = mockMvc.post().uri("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body)
-                .exchange();
-
-        assertThat(result).hasStatus(HttpStatus.CREATED);
-        assertThat(result).bodyJson().convertTo(AuthResponse.class)
-                .satisfies(r -> {
-                    assertThat(r.token()).isNotBlank();
-                    assertThat(r.email()).isEqualTo("ivan@example.com");
-                    assertThat(r.role()).isEqualTo(Role.MANAGER);
-                });
-    }
-
-    @Test
     void login_returns200WithToken() {
         MvcTestResult result = mockMvc.post().uri("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
