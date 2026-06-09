@@ -1,5 +1,6 @@
 package com.ilynkin.coding_assignment.service;
 
+import com.ilynkin.coding_assignment.config.AppProperties;
 import com.ilynkin.coding_assignment.service.MeterReadingReportService.ReportFile;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -21,8 +23,10 @@ class ReportEmailSenderTest {
         MimeMessage message = new JavaMailSenderImpl().createMimeMessage();
         when(mailSender.createMimeMessage()).thenReturn(message);
 
-        ReportEmailSender sender = new ReportEmailSender(
-                mailSender, "user@example.com", "noreply@meterhub.local", "Показания");
+        AppProperties appProperties = new AppProperties(null,
+                new AppProperties.Report("user@example.com", "noreply@meterhub.local", "Показания",
+                        Duration.ofDays(14), Duration.ofDays(14), 14));
+        ReportEmailSender sender = new ReportEmailSender(mailSender, appProperties);
 
         sender.send(new ReportFile("meter-readings-2024-02-20.csv",
                 "serial,date,T1\nSN-1,2024-02-20,100\n".getBytes(StandardCharsets.UTF_8), 14));
